@@ -1,0 +1,9 @@
+C:\Users\kseni\Source\Repos\Kosksenia\Object-oriented-analysis-and-design-2\lab01\LogisticsRoutePlanner\obj\Debug\LogisticsRoutePlanner.csproj.AssemblyReference.cache
+C:\Users\kseni\Source\Repos\Kosksenia\Object-oriented-analysis-and-design-2\lab01\LogisticsRoutePlanner\obj\Debug\LogisticsRoutePlanner.Properties.Resources.resources
+C:\Users\kseni\Source\Repos\Kosksenia\Object-oriented-analysis-and-design-2\lab01\LogisticsRoutePlanner\obj\Debug\LogisticsRoutePlanner.csproj.GenerateResource.cache
+C:\Users\kseni\Source\Repos\Kosksenia\Object-oriented-analysis-and-design-2\lab01\LogisticsRoutePlanner\obj\Debug\LogisticsRoutePlanner.csproj.CoreCompileInputs.cache
+C:\Users\kseni\Source\Repos\Kosksenia\Object-oriented-analysis-and-design-2\lab01\LogisticsRoutePlanner\bin\Debug\LogisticsRoutePlanner.exe.config
+C:\Users\kseni\Source\Repos\Kosksenia\Object-oriented-analysis-and-design-2\lab01\LogisticsRoutePlanner\bin\Debug\LogisticsRoutePlanner.exe
+C:\Users\kseni\Source\Repos\Kosksenia\Object-oriented-analysis-and-design-2\lab01\LogisticsRoutePlanner\bin\Debug\LogisticsRoutePlanner.pdb
+C:\Users\kseni\Source\Repos\Kosksenia\Object-oriented-analysis-and-design-2\lab01\LogisticsRoutePlanner\obj\Debug\LogisticsRoutePlanner.exe
+C:\Users\kseni\Source\Repos\Kosksenia\Object-oriented-analysis-and-design-2\lab01\LogisticsRoutePlanner\obj\Debug\LogisticsRoutePlanner.pdb
