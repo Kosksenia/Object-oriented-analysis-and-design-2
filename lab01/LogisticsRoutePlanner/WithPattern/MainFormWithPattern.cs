@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace LogisticsWithPattern
 {
-    public partial class MainFormWithPattern : Form
+    public class MainFormWithPattern : Form
     {
         private ComboBox cmbTransportType;
         private TextBox txtStartPoint;
@@ -30,34 +30,26 @@ namespace LogisticsWithPattern
 
         private void InitializeFactories()
         {
-            factories = new Dictionary<string, RouterFactory>
-            {
-                { "Грузовик", new TruckRouterFactory() },
-                { "Корабль", new ShipRouterFactory() },
-                { "Самолет", new PlaneRouterFactory() }
-                // Электросамокат будет добавлен позже по кнопке
-            };
+            factories = new Dictionary<string, RouterFactory>();
         }
 
         private void InitializeComponent()
         {
-            this.Text = "Logistics Route Planner (With Factory Method)";
+            this.Text = "Logistics Route Planner (Factory Method)";
             this.Size = new Size(900, 600);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.BackColor = Color.WhiteSmoke;
 
-            // Заголовок
-            Label lblTitle = new Label()
+            Label lblTitle = new Label
             {
-                Text = "Профессиональный планировщик маршрутов",
+                Text = "Планировщик маршрутов",
                 Font = new Font("Arial", 16, FontStyle.Bold),
                 Location = new Point(20, 20),
-                Size = new Size(500, 35),
+                Size = new Size(400, 35),
                 ForeColor = Color.DarkBlue
             };
 
-            // Панель ввода
-            GroupBox inputGroup = new GroupBox()
+            GroupBox inputGroup = new GroupBox
             {
                 Text = "Параметры маршрута",
                 Location = new Point(20, 60),
@@ -65,32 +57,30 @@ namespace LogisticsWithPattern
                 Font = new Font("Arial", 10)
             };
 
-            Label lblTransport = new Label()
+            Label lblTransport = new Label
             {
                 Text = "Тип транспорта:",
                 Location = new Point(15, 30),
                 Size = new Size(120, 25)
             };
 
-            cmbTransportType = new ComboBox()
+            cmbTransportType = new ComboBox
             {
                 Location = new Point(140, 27),
                 Size = new Size(200, 25),
                 DropDownStyle = ComboBoxStyle.DropDownList,
                 Font = new Font("Arial", 10)
             };
-            cmbTransportType.Items.AddRange(factories.Keys.ToArray());
-            cmbTransportType.SelectedIndex = 0;
             cmbTransportType.SelectedIndexChanged += CmbTransportType_SelectedIndexChanged;
 
-            Label lblStart = new Label()
+            Label lblStart = new Label
             {
                 Text = "Откуда:",
                 Location = new Point(15, 65),
                 Size = new Size(120, 25)
             };
 
-            txtStartPoint = new TextBox()
+            txtStartPoint = new TextBox
             {
                 Location = new Point(140, 62),
                 Size = new Size(200, 25),
@@ -98,14 +88,14 @@ namespace LogisticsWithPattern
                 Font = new Font("Arial", 10)
             };
 
-            Label lblEnd = new Label()
+            Label lblEnd = new Label
             {
                 Text = "Куда:",
                 Location = new Point(15, 100),
                 Size = new Size(120, 25)
             };
 
-            txtEndPoint = new TextBox()
+            txtEndPoint = new TextBox
             {
                 Location = new Point(140, 97),
                 Size = new Size(200, 25),
@@ -117,8 +107,7 @@ namespace LogisticsWithPattern
                 lblTransport, cmbTransportType, lblStart, txtStartPoint, lblEnd, txtEndPoint
             });
 
-            // Кнопки
-            btnCalculate = new Button()
+            btnCalculate = new Button
             {
                 Text = "Рассчитать маршрут",
                 Location = new Point(140, 250),
@@ -130,9 +119,9 @@ namespace LogisticsWithPattern
             };
             btnCalculate.Click += BtnCalculate_Click;
 
-            btnAddNewTransport = new Button()
+            btnAddNewTransport = new Button
             {
-                Text = "+ Добавить новый транспорт",
+                Text = "+ Добавить транспорт",
                 Location = new Point(140, 300),
                 Size = new Size(180, 30),
                 BackColor = Color.LightBlue,
@@ -142,8 +131,7 @@ namespace LogisticsWithPattern
             };
             btnAddNewTransport.Click += BtnAddNewTransport_Click;
 
-            // Информация о фабрике
-            lblFactoryInfo = new Label()
+            lblFactoryInfo = new Label
             {
                 Text = "",
                 Location = new Point(20, 340),
@@ -152,8 +140,7 @@ namespace LogisticsWithPattern
                 Font = new Font("Arial", 9, FontStyle.Italic)
             };
 
-            // Результат
-            GroupBox resultGroup = new GroupBox()
+            GroupBox resultGroup = new GroupBox
             {
                 Text = "Детали маршрута",
                 Location = new Point(20, 380),
@@ -161,7 +148,7 @@ namespace LogisticsWithPattern
                 Font = new Font("Arial", 10)
             };
 
-            rtbResult = new RichTextBox()
+            rtbResult = new RichTextBox
             {
                 Location = new Point(10, 20),
                 Size = new Size(380, 140),
@@ -171,16 +158,15 @@ namespace LogisticsWithPattern
             };
             resultGroup.Controls.Add(rtbResult);
 
-            // История маршрутов
-            GroupBox historyGroup = new GroupBox()
+            GroupBox historyGroup = new GroupBox
             {
-                Text = "История маршрутов",
+                Text = "История",
                 Location = new Point(450, 60),
                 Size = new Size(400, 450),
                 Font = new Font("Arial", 10)
             };
 
-            lbHistory = new ListBox()
+            lbHistory = new ListBox
             {
                 Location = new Point(10, 20),
                 Size = new Size(380, 380),
@@ -190,17 +176,15 @@ namespace LogisticsWithPattern
 
             historyGroup.Controls.Add(lbHistory);
 
-            // Статус
-            lblStatus = new Label()
+            lblStatus = new Label
             {
-                Text = "✓ Готов к работе. Используется паттерн 'Фабричный метод'",
+                Text = "✓ Добавьте первый транспорт",
                 Location = new Point(20, 560),
                 Size = new Size(800, 30),
                 ForeColor = Color.Green,
                 Font = new Font("Arial", 9)
             };
 
-            // Добавление элементов
             this.Controls.AddRange(new Control[] {
                 lblTitle, inputGroup, btnCalculate, btnAddNewTransport,
                 lblFactoryInfo, resultGroup, historyGroup, lblStatus
@@ -216,7 +200,7 @@ namespace LogisticsWithPattern
 
         private void UpdateFactoryInfo()
         {
-            if (cmbTransportType.SelectedItem != null)
+            if (cmbTransportType.SelectedItem != null && factories.Count > 0)
             {
                 string selected = cmbTransportType.SelectedItem.ToString();
                 if (factories.ContainsKey(selected))
@@ -225,109 +209,104 @@ namespace LogisticsWithPattern
                     lblFactoryInfo.Text = $"✓ Активная фабрика: {factory.GetFactoryInfo()}";
                 }
             }
+            else
+            {
+                lblFactoryInfo.Text = "Добавьте транспорт →";
+            }
         }
 
         private void BtnCalculate_Click(object sender, EventArgs e)
         {
             try
             {
+                if (factories.Count == 0)
+                {
+                    MessageBox.Show("Сначала добавьте транспорт!",
+                        "Нет транспорта", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 string start = txtStartPoint.Text.Trim();
                 string end = txtEndPoint.Text.Trim();
 
                 if (string.IsNullOrEmpty(start) || string.IsNullOrEmpty(end))
                 {
-                    MessageBox.Show("Введите начальную и конечную точки!",
-                        "Ошибка ввода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Введите точки маршрута!",
+                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                lblStatus.Text = "⏳ Расчет маршрута...";
+                lblStatus.Text = "⏳ Расчет...";
                 lblStatus.ForeColor = Color.Orange;
                 Application.DoEvents();
 
-                // Получаем выбранную фабрику
-                string selectedType = cmbTransportType.SelectedItem.ToString();
+                string selectedType = cmbTransportType.SelectedItem?.ToString();
 
-                if (!factories.ContainsKey(selectedType))
+                if (string.IsNullOrEmpty(selectedType) || !factories.ContainsKey(selectedType))
                 {
-                    MessageBox.Show($"Фабрика для типа '{selectedType}' не найдена!",
-                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Выберите тип транспорта!",
+                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
                 RouterFactory factory = factories[selectedType];
-
-                // Используем фабричный метод для планирования маршрута
                 IRouteResult result = factory.PlanRoute(start, end);
 
-                // Сохраняем в историю
                 routeHistory.Add(result);
                 lbHistory.Items.Add($"{result.TransportType}: {start} → {end}");
 
-                // Отображаем результат
                 DisplayResult(result);
 
-                lblStatus.Text = "✅ Маршрут успешно рассчитан с использованием паттерна 'Фабричный метод'!";
+                lblStatus.Text = "✅ Готово!";
                 lblStatus.ForeColor = Color.Green;
             }
             catch (Exception ex)
             {
-                lblStatus.Text = "❌ Ошибка при расчете!";
+                lblStatus.Text = "❌ Ошибка!";
                 lblStatus.ForeColor = Color.Red;
                 MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        // ИСПРАВЛЕННЫЙ МЕТОД ДОБАВЛЕНИЯ НОВОГО ТРАНСПОРТА
         private void BtnAddNewTransport_Click(object sender, EventArgs e)
         {
             try
             {
-                // Демонстрация легкого расширения системы
-                if (!factories.ContainsKey("Электросамокат"))
+                using (var dialog = new AddTransportDialog())
                 {
-                    // Добавляем новую фабрику
-                    factories.Add("Электросамокат", new ElectricScooterRouterFactory());
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        string name = dialog.TransportName;
 
-                    // Обновляем комбобокс
-                    cmbTransportType.Items.Clear();
-                    cmbTransportType.Items.AddRange(factories.Keys.ToArray());
+                        if (factories.ContainsKey(name))
+                        {
+                            MessageBox.Show($"Транспорт '{name}' уже есть!",
+                                "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
 
-                    // Автоматически выбираем новый тип
-                    cmbTransportType.SelectedItem = "Электросамокат";
+                        var factory = new DynamicRouterFactory(
+                            name, dialog.AverageSpeed, dialog.RatePerKm, dialog.MaxDistance
+                        );
 
-                    lblStatus.Text = "✅ Новый тип транспорта 'Электросамокат' добавлен!";
-                    lblStatus.ForeColor = Color.Blue;
+                        factories.Add(name, factory);
 
-                    UpdateFactoryInfo();
+                        cmbTransportType.Items.Clear();
+                        cmbTransportType.Items.AddRange(factories.Keys.ToArray());
+                        cmbTransportType.SelectedItem = name;
 
-                    MessageBox.Show("Новый тип транспорта успешно добавлен!\n\n" +
-                        "Это демонстрирует главное преимущество паттерна 'Фабричный метод':\n" +
-                        "✓ Расширение без модификации существующего кода\n" +
-                        "✓ Соблюдение принципа Open/Closed\n" +
-                        "✓ Слабая связанность компонентов\n\n" +
-                        "Теперь вы можете рассчитать маршрут для электросамоката!",
-                        "Преимущество паттерна",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Тип 'Электросамокат' уже добавлен!\n\n" +
-                        "Попробуйте рассчитать маршрут, выбрав его в списке.",
-                        "Информация",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                        lblStatus.Text = $"✅ Добавлен: {name}";
+                        lblStatus.ForeColor = Color.Blue;
 
-                    // Просто выбираем существующий тип
-                    cmbTransportType.SelectedItem = "Электросамокат";
+                        UpdateFactoryInfo();
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при добавлении: {ex.Message}",
-                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -343,15 +322,13 @@ namespace LogisticsWithPattern
         {
             rtbResult.Clear();
 
-            // Заголовок
             rtbResult.SelectionFont = new Font("Consolas", 10, FontStyle.Bold);
             rtbResult.SelectionColor = Color.DarkBlue;
-            rtbResult.AppendText($"=== ИНФОРМАЦИЯ О МАРШРУТЕ ===\n\n");
+            rtbResult.AppendText($"=== МАРШРУТ ===\n\n");
 
-            // Основная информация
             rtbResult.SelectionFont = new Font("Consolas", 9, FontStyle.Bold);
             rtbResult.SelectionColor = Color.Black;
-            rtbResult.AppendText($"Тип транспорта: ");
+            rtbResult.AppendText($"Транспорт: ");
 
             rtbResult.SelectionFont = new Font("Consolas", 9, FontStyle.Regular);
             rtbResult.SelectionColor = Color.DarkGreen;
@@ -375,7 +352,7 @@ namespace LogisticsWithPattern
 
             rtbResult.SelectionFont = new Font("Consolas", 9, FontStyle.Bold);
             rtbResult.SelectionColor = Color.Black;
-            rtbResult.AppendText($"Время в пути: ");
+            rtbResult.AppendText($"Время: ");
 
             rtbResult.SelectionFont = new Font("Consolas", 9, FontStyle.Regular);
             rtbResult.SelectionColor = Color.Purple;
@@ -383,7 +360,7 @@ namespace LogisticsWithPattern
 
             rtbResult.SelectionFont = new Font("Consolas", 9, FontStyle.Bold);
             rtbResult.SelectionColor = Color.Black;
-            rtbResult.AppendText($"Стоимость: ");
+            rtbResult.AppendText($"Цена: ");
 
             rtbResult.SelectionFont = new Font("Consolas", 9, FontStyle.Regular);
             rtbResult.SelectionColor = Color.Red;
@@ -391,16 +368,15 @@ namespace LogisticsWithPattern
 
             rtbResult.SelectionFont = new Font("Consolas", 9, FontStyle.Bold);
             rtbResult.SelectionColor = Color.Black;
-            rtbResult.AppendText($"Расход топлива: ");
+            rtbResult.AppendText($"Топливо: ");
 
             rtbResult.SelectionFont = new Font("Consolas", 9, FontStyle.Regular);
             rtbResult.SelectionColor = Color.Brown;
             rtbResult.AppendText($"{result.FuelConsumption:F1} л\n\n");
 
-            // Специфические ограничения
             rtbResult.SelectionFont = new Font("Consolas", 9, FontStyle.Bold);
             rtbResult.SelectionColor = Color.Maroon;
-            rtbResult.AppendText($"ОГРАНИЧЕНИЯ И ОСОБЕННОСТИ:\n");
+            rtbResult.AppendText($"ОГРАНИЧЕНИЯ:\n");
 
             rtbResult.SelectionFont = new Font("Consolas", 9, FontStyle.Regular);
             rtbResult.SelectionColor = Color.DarkRed;

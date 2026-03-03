@@ -51,12 +51,19 @@
     <Compile Include="WithoutPattern\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WithPattern\Factories.cs" />
+    <Compile Include="WithPattern\AddTransportDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WithPattern\BaseRouter.cs" />
+    <Compile Include="WithPattern\DynamicRouter.cs" />
+    <Compile Include="WithPattern\DynamicRouterFactory.cs" />
+    <Compile Include="WithPattern\IRouter.cs" />
+    <Compile Include="WithPattern\IRouteResult.cs" />
     <Compile Include="WithPattern\MainFormWithPattern.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WithPattern\RouterInterfaces.cs" />
-    <Compile Include="WithPattern\Routers.cs" />
+    <Compile Include="WithPattern\RouteResult.cs" />
+    <Compile Include="WithPattern\RouterFactory.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
