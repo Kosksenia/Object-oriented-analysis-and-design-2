@@ -37,10 +37,10 @@
 ## Диаграммы классов
 
 ### 1. Диаграмма классов БЕЗ использования паттерна (проблемная версия)
-![Диаграмма без паттерна](https://github.com/Kosksenia/Object-oriented-analysis-and-design-2/blob/0fb595898592b77c1fa873ef7227cd5d6053cf58/lab01/%D1%84%D0%B0%D0%B1%D1%80%D0%B8%D1%87%D0%BD%D1%8B%D0%B9%20%D0%BC%D0%B5%D1%82%D0%BE%D0%B4-%D0%A1%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0-1.drawio%20(2).png?raw=true)
+![Диаграмма без паттерна](https://github.com/Kosksenia/Object-oriented-analysis-and-design-2/blob/feae9f91a47f6ac50603c1139bf3ee1436c5ecc4/lab01/%D1%84%D0%B0%D0%B1%D1%80%D0%B8%D1%87%D0%BD%D1%8B%D0%B9%20%D0%BC%D0%B5%D1%82%D0%BE%D0%B4-%D0%A1%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0-1.drawio%20(3).png?raw=true)
 
 ### 2. Диаграмма классов С использованием паттерна «Фабричный метод» (динамическая версия)
-![Диаграмма с паттерном](https://github.com/Kosksenia/Object-oriented-analysis-and-design-2/blob/6a8573edde1584c1499846f08693adfa471ec20d/lab01/%D1%84%D0%B0%D0%B1%D1%80%D0%B8%D1%87%D0%BD%D1%8B%D0%B9%20%D0%BC%D0%B5%D1%82%D0%BE%D0%B4-%D0%A1%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0-2.drawio%20(2).png?raw=true)
+![Диаграмма с паттерном](https://github.com/Kosksenia/Object-oriented-analysis-and-design-2/blob/feae9f91a47f6ac50603c1139bf3ee1436c5ecc4/lab01/%D1%84%D0%B0%D0%B1%D1%80%D0%B8%D1%87%D0%BD%D1%8B%D0%B9%20%D0%BC%D0%B5%D1%82%D0%BE%D0%B4-%D0%A1%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0-2.drawio%20(3).png?raw=true)
 
 ## Ключевые особенности реализации
 
@@ -74,4 +74,5 @@
 - **Возможность добавления новых типов без перекомпиляции**
 
 Версия без паттерна, напротив, показывает все проблемы жесткой связанности и невозможности расширения без изменения существующего кода.
+
 
