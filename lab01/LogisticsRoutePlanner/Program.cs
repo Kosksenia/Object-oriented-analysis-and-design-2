@@ -11,8 +11,8 @@ namespace LogisticsRoutePlanner
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new MainFormWithPattern());
-            Application.Run(new LogisticsWithoutPattern.MainForm());
+            Application.Run(new MainFormWithPattern());
+            //Application.Run(new LogisticsWithoutPattern.MainForm());
         }
     }
 }

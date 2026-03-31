@@ -1,0 +1,5 @@
+# ninja log v5
+5	1312	7966853824847357	CMakeFiles/warehouse_bad.dir/src/bad/main_bad.cpp.obj	ee916576a2078a02
+63	2032	7966857772447168	bin/warehouse_bad.exe	7a940230ce3740cd
+73	2742	7966857779837215	CMakeFiles/warehouse_good.dir/src/good/main_good.cpp.obj	90784f51cb173a73
+2743	3301	7966857785177224	bin/warehouse_good.exe	f84392e67413c76b
