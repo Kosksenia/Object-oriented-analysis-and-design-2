@@ -52,7 +52,7 @@ public:
         tv.item.mask = TVIF_TEXT;
 
         char text[512];
-        sprintf_s(text, "    📄 %s | Вес: %.0f кг | Страх: %.0f руб | %s | %s",
+        sprintf_s(text, "    [ГРУЗ] %s | Вес: %.0f кг | Страх: %.0f руб | %s | %s",
             m_name.c_str(), m_weight, getInsurance(), m_barcode.c_str(), m_category.c_str());
         tv.item.pszText = text;
         TreeView_InsertItem(tree, &tv);
@@ -106,13 +106,14 @@ public:
         tv.hInsertAfter = TVI_LAST;
         tv.item.mask = TVIF_TEXT;
 
-        const char* icon = "📦";
-        if (m_type == "Рефрижератор") icon = "❄️";
-        else if (m_type == "Опасный") icon = "⚠️";
+        char typePrefix[32] = "";
+        if (m_type == "Рефрижератор") strcpy_s(typePrefix, "[РЕФРИЖЕРАТОР]");
+        else if (m_type == "Опасный") strcpy_s(typePrefix, "[ОПАСНЫЙ]");
+        else strcpy_s(typePrefix, "[КОНТЕЙНЕР]");
 
         char text[512];
-        sprintf_s(text, "%s КОНТЕЙНЕР: %s [%s] | Тип: %s | Вес: %.0f кг",
-            icon, m_name.c_str(), m_id.c_str(), m_type.c_str(), getWeight());
+        sprintf_s(text, "%s %s [%s] | Тип: %s | Вес: %.0f кг",
+            typePrefix, m_name.c_str(), m_id.c_str(), m_type.c_str(), getWeight());
         tv.item.pszText = text;
 
         HTREEITEM hItem = TreeView_InsertItem(tree, &tv);
@@ -171,7 +172,7 @@ public:
         tv.item.mask = TVIF_TEXT;
 
         char text[512];
-        sprintf_s(text, "🏢 СКЛАД: %s [%s] | Менеджер: %s",
+        sprintf_s(text, "[СКЛАД] %s [%s] | Менеджер: %s",
             m_address.c_str(), m_code.c_str(), m_manager.c_str());
         tv.item.pszText = text;
 
@@ -201,26 +202,23 @@ HWND g_hEditContName;
 
 // ==================== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ====================
 
-// Обновление дерева
 void RefreshTreeView() {
     TreeView_DeleteAllItems(g_hTreeView);
     if (g_warehouse) {
         g_warehouse->addToTree(g_hTreeView);
 
         char status[512];
-        sprintf_s(status, "Общий вес: %.0f кг | Страховка: %.0f руб | ✅ Паттерн Composite",
+        sprintf_s(status, "Общий вес: %.0f кг | Страховка: %.0f руб | ПАТТЕРН COMPOSITE",
             g_warehouse->getWeight(), g_warehouse->getInsurance());
         SendMessageA(g_hStatusBar, SB_SETTEXT, 0, (LPARAM)status);
     }
 }
 
-// Обновление списка родительских контейнеров
 void UpdateParentList() {
     SendMessageA(g_hComboParent, CB_RESETCONTENT, 0, 0);
     SendMessageA(g_hComboParent, CB_ADDSTRING, 0, (LPARAM)"Склад (корневой уровень)");
 }
 
-// Добавление груза
 void AddCargo() {
     char name[256] = { 0 };
     char barcode[256] = { 0 };
@@ -252,7 +250,6 @@ void AddCargo() {
     auto cargo = std::make_shared<Cargo>(name, weight, rate, barcode, category);
     g_warehouse->add(cargo);
 
-    // Очистка полей
     SetWindowTextA(g_hEditName, "");
     SetWindowTextA(g_hEditBarcode, "");
     SetWindowTextA(g_hEditWeight, "100");
@@ -262,7 +259,6 @@ void AddCargo() {
     RefreshTreeView();
 }
 
-// Добавление контейнера
 void AddContainer() {
     char name[256] = { 0 };
     char type[64] = { 0 };
@@ -292,7 +288,6 @@ void AddContainer() {
     RefreshTreeView();
 }
 
-// Поиск по штрих-коду
 void OnSearch() {
     char barcode[256] = { 0 };
     GetWindowTextA(g_hEditSearch, barcode, 255);
@@ -301,7 +296,7 @@ void OnSearch() {
         std::shared_ptr<CargoComponent> found = g_warehouse->findByBarcode(barcode);
         if (found) {
             char msg[512];
-            sprintf_s(msg, "✅ НАЙДЕН ГРУЗ!\n\n"
+            sprintf_s(msg, "НАЙДЕН ГРУЗ!\n\n"
                 "Наименование: %s\n"
                 "Вес: %.0f кг\n"
                 "Страховка: %.0f руб\n"
@@ -313,7 +308,7 @@ void OnSearch() {
             MessageBoxA(NULL, msg, "Результат поиска", MB_OK | MB_ICONINFORMATION);
         }
         else {
-            MessageBoxA(NULL, "❌ Груз с таким штрих-кодом не найден", "Результат поиска", MB_ICONINFORMATION);
+            MessageBoxA(NULL, "Груз с таким штрих-кодом не найден", "Результат поиска", MB_ICONINFORMATION);
         }
     }
 }
@@ -322,14 +317,11 @@ void OnSearch() {
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
     case WM_CREATE: {
-        // Инициализация Common Controls
         INITCOMMONCONTROLSEX icex = { sizeof(INITCOMMONCONTROLSEX), ICC_TREEVIEW_CLASSES | ICC_BAR_CLASSES };
         InitCommonControlsEx(&icex);
 
-        // Создание склада с тестовыми данными
         g_warehouse = std::make_shared<Warehouse>("Москва, ул. Логистическая 15", "WH-001", "Иванов И.И.");
 
-        // Создание тестовых контейнеров и грузов
         auto container1 = std::make_shared<Container>("Морской контейнер 20ft", "CONT-001", "Стандартный");
         container1->add(std::make_shared<Cargo>("Ноутбуки Dell", 450, 15, "BC-001", "Хрупкий"));
         container1->add(std::make_shared<Cargo>("Мониторы Samsung", 300, 12, "BC-002", "Хрупкий"));
@@ -350,24 +342,29 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         GetClientRect(hwnd, &rc);
 
         // ========== ЛЕВАЯ ПАНЕЛЬ - ДОБАВЛЕНИЕ ГРУЗА ==========
+        // Заголовок
         CreateWindowA("STATIC", "ДОБАВЛЕНИЕ ГРУЗА", WS_CHILD | WS_VISIBLE,
             10, 10, 280, 20, hwnd, NULL, NULL, NULL);
 
+        // Название
         CreateWindowA("STATIC", "Название:", WS_CHILD | WS_VISIBLE, 10, 35, 70, 20, hwnd, NULL, NULL, NULL);
-        g_hEditName = CreateWindowA("EDIT", "", WS_CHILD | WS_VISIBLE | WS_BORDER, 90, 33, 200, 22, hwnd, NULL, NULL, NULL);
+        g_hEditName = CreateWindowA("EDIT", "", WS_CHILD | WS_VISIBLE | WS_BORDER, 90, 33, 200, 24, hwnd, NULL, NULL, NULL);
 
-        CreateWindowA("STATIC", "Вес (кг):", WS_CHILD | WS_VISIBLE, 10, 60, 70, 20, hwnd, NULL, NULL, NULL);
-        g_hEditWeight = CreateWindowA("EDIT", "100", WS_CHILD | WS_VISIBLE | WS_BORDER, 90, 58, 80, 22, hwnd, NULL, NULL, NULL);
+        // Вес и страховка (в одной строке)
+        CreateWindowA("STATIC", "Вес (кг):", WS_CHILD | WS_VISIBLE, 10, 62, 70, 20, hwnd, NULL, NULL, NULL);
+        g_hEditWeight = CreateWindowA("EDIT", "100", WS_CHILD | WS_VISIBLE | WS_BORDER, 90, 60, 80, 24, hwnd, NULL, NULL, NULL);
 
-        CreateWindowA("STATIC", "Страх. (руб/кг):", WS_CHILD | WS_VISIBLE, 180, 60, 80, 20, hwnd, NULL, NULL, NULL);
-        g_hEditRate = CreateWindowA("EDIT", "10", WS_CHILD | WS_VISIBLE | WS_BORDER, 260, 58, 40, 22, hwnd, NULL, NULL, NULL);
+        CreateWindowA("STATIC", "Страх.(руб/кг):", WS_CHILD | WS_VISIBLE, 170, 62, 100, 20, hwnd, NULL, NULL, NULL);
+        g_hEditRate = CreateWindowA("EDIT", "10", WS_CHILD | WS_VISIBLE | WS_BORDER, 270, 60, 30, 24, hwnd, NULL, NULL, NULL);
 
-        CreateWindowA("STATIC", "Штрих-код:", WS_CHILD | WS_VISIBLE, 10, 85, 70, 20, hwnd, NULL, NULL, NULL);
-        g_hEditBarcode = CreateWindowA("EDIT", "", WS_CHILD | WS_VISIBLE | WS_BORDER, 90, 83, 200, 22, hwnd, NULL, NULL, NULL);
+        // Штрих-код
+        CreateWindowA("STATIC", "Штрих-код:", WS_CHILD | WS_VISIBLE, 10, 90, 70, 20, hwnd, NULL, NULL, NULL);
+        g_hEditBarcode = CreateWindowA("EDIT", "", WS_CHILD | WS_VISIBLE | WS_BORDER, 90, 88, 200, 24, hwnd, NULL, NULL, NULL);
 
-        CreateWindowA("STATIC", "Категория:", WS_CHILD | WS_VISIBLE, 10, 110, 70, 20, hwnd, NULL, NULL, NULL);
+        // Категория
+        CreateWindowA("STATIC", "Категория:", WS_CHILD | WS_VISIBLE, 10, 118, 70, 20, hwnd, NULL, NULL, NULL);
         g_hComboCategory = CreateWindowA("COMBOBOX", "", WS_CHILD | WS_VISIBLE | CBS_DROPDOWNLIST | WS_BORDER,
-            90, 108, 200, 100, hwnd, NULL, NULL, NULL);
+            90, 115, 200, 100, hwnd, NULL, NULL, NULL);
         SendMessageA(g_hComboCategory, CB_ADDSTRING, 0, (LPARAM)"Обычный");
         SendMessageA(g_hComboCategory, CB_ADDSTRING, 0, (LPARAM)"Хрупкий");
         SendMessageA(g_hComboCategory, CB_ADDSTRING, 0, (LPARAM)"Опасный");
@@ -375,52 +372,54 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         SendMessageA(g_hComboCategory, CB_ADDSTRING, 0, (LPARAM)"Оборудование");
         SendMessageA(g_hComboCategory, CB_SETCURSEL, 0, 0);
 
-        CreateWindowA("STATIC", "Разместить:", WS_CHILD | WS_VISIBLE, 10, 135, 70, 20, hwnd, NULL, NULL, NULL);
+        // Разместить
+        CreateWindowA("STATIC", "Разместить:", WS_CHILD | WS_VISIBLE, 10, 145, 70, 20, hwnd, NULL, NULL, NULL);
         g_hComboParent = CreateWindowA("COMBOBOX", "", WS_CHILD | WS_VISIBLE | CBS_DROPDOWNLIST | WS_BORDER,
-            90, 133, 200, 100, hwnd, NULL, NULL, NULL);
+            90, 142, 200, 100, hwnd, NULL, NULL, NULL);
         SendMessageA(g_hComboParent, CB_ADDSTRING, 0, (LPARAM)"Склад");
         SendMessageA(g_hComboParent, CB_SETCURSEL, 0, 0);
 
-        CreateWindowA("BUTTON", "➕ ДОБАВИТЬ ГРУЗ", WS_CHILD | WS_VISIBLE,
-            10, 160, 280, 35, hwnd, (HMENU)1, NULL, NULL);
+        // Кнопка добавления груза
+        CreateWindowA("BUTTON", "ДОБАВИТЬ ГРУЗ", WS_CHILD | WS_VISIBLE,
+            10, 170, 280, 35, hwnd, (HMENU)1, NULL, NULL);
 
         // Разделитель
-        CreateWindowA("STATIC", "", WS_CHILD | WS_VISIBLE | SS_ETCHEDHORZ, 10, 205, 280, 2, hwnd, NULL, NULL, NULL);
+        CreateWindowA("STATIC", "", WS_CHILD | WS_VISIBLE | SS_ETCHEDHORZ, 10, 215, 280, 2, hwnd, NULL, NULL, NULL);
 
         // ========== ДОБАВЛЕНИЕ КОНТЕЙНЕРА ==========
         CreateWindowA("STATIC", "ДОБАВЛЕНИЕ КОНТЕЙНЕРА", WS_CHILD | WS_VISIBLE,
-            10, 215, 280, 20, hwnd, NULL, NULL, NULL);
+            10, 225, 280, 20, hwnd, NULL, NULL, NULL);
 
-        CreateWindowA("STATIC", "Название:", WS_CHILD | WS_VISIBLE, 10, 240, 70, 20, hwnd, NULL, NULL, NULL);
-        g_hEditContName = CreateWindowA("EDIT", "", WS_CHILD | WS_VISIBLE | WS_BORDER, 90, 238, 200, 22, hwnd, NULL, NULL, NULL);
+        CreateWindowA("STATIC", "Название:", WS_CHILD | WS_VISIBLE, 10, 250, 70, 20, hwnd, NULL, NULL, NULL);
+        g_hEditContName = CreateWindowA("EDIT", "", WS_CHILD | WS_VISIBLE | WS_BORDER, 90, 248, 200, 24, hwnd, NULL, NULL, NULL);
 
-        CreateWindowA("STATIC", "Тип:", WS_CHILD | WS_VISIBLE, 10, 265, 70, 20, hwnd, NULL, NULL, NULL);
+        CreateWindowA("STATIC", "Тип:", WS_CHILD | WS_VISIBLE, 10, 278, 70, 20, hwnd, NULL, NULL, NULL);
         g_hComboType = CreateWindowA("COMBOBOX", "", WS_CHILD | WS_VISIBLE | CBS_DROPDOWNLIST | WS_BORDER,
-            90, 263, 200, 100, hwnd, NULL, NULL, NULL);
+            90, 275, 200, 100, hwnd, NULL, NULL, NULL);
         SendMessageA(g_hComboType, CB_ADDSTRING, 0, (LPARAM)"Стандартный");
         SendMessageA(g_hComboType, CB_ADDSTRING, 0, (LPARAM)"Рефрижератор");
         SendMessageA(g_hComboType, CB_ADDSTRING, 0, (LPARAM)"Опасный");
         SendMessageA(g_hComboType, CB_ADDSTRING, 0, (LPARAM)"Составной");
         SendMessageA(g_hComboType, CB_SETCURSEL, 0, 0);
 
-        CreateWindowA("BUTTON", "📦 ДОБАВИТЬ КОНТЕЙНЕР", WS_CHILD | WS_VISIBLE,
-            10, 290, 280, 35, hwnd, (HMENU)2, NULL, NULL);
+        CreateWindowA("BUTTON", "ДОБАВИТЬ КОНТЕЙНЕР", WS_CHILD | WS_VISIBLE,
+            10, 305, 280, 35, hwnd, (HMENU)2, NULL, NULL);
 
         // ========== ПРАВАЯ ПАНЕЛЬ - ДЕРЕВО И ПОИСК ==========
         CreateWindowA("STATIC", "ИЕРАРХИЯ СКЛАДА", WS_CHILD | WS_VISIBLE,
-            310, 10, 580, 20, hwnd, NULL, NULL, NULL);
+            310, 10, 400, 20, hwnd, NULL, NULL, NULL);
 
         CreateWindowA("STATIC", "Поиск по штрих-коду:", WS_CHILD | WS_VISIBLE,
             310, 35, 120, 20, hwnd, NULL, NULL, NULL);
         g_hEditSearch = CreateWindowA("EDIT", "BC-001", WS_CHILD | WS_VISIBLE | WS_BORDER,
-            440, 33, 150, 22, hwnd, NULL, NULL, NULL);
-        CreateWindowA("BUTTON", "🔍 Найти", WS_CHILD | WS_VISIBLE,
-            600, 33, 80, 22, hwnd, (HMENU)3, NULL, NULL);
+            440, 33, 150, 24, hwnd, NULL, NULL, NULL);
+        CreateWindowA("BUTTON", "ПОИСК", WS_CHILD | WS_VISIBLE,
+            600, 33, 80, 24, hwnd, (HMENU)3, NULL, NULL);
 
         // Дерево
         g_hTreeView = CreateWindowA(WC_TREEVIEWA, "", WS_CHILD | WS_VISIBLE | WS_BORDER |
             TVS_HASLINES | TVS_HASBUTTONS | TVS_LINESATROOT,
-            310, 60, rc.right - 320, rc.bottom - 120, hwnd, NULL, NULL, NULL);
+            400, 65, rc.right - 200, rc.bottom - 100, hwnd, NULL, NULL, NULL);
 
         // Статус-бар
         g_hStatusBar = CreateWindowA(STATUSCLASSNAMEA, "", WS_CHILD | WS_VISIBLE | SBARS_SIZEGRIP,
@@ -441,8 +440,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         GetWindowRect(g_hStatusBar, &rcStatus);
         int statusHeight = rcStatus.bottom - rcStatus.top;
 
-        SetWindowPos(g_hTreeView, NULL, 310, 60,
-            rc.right - 320, rc.bottom - statusHeight - 70, SWP_NOZORDER);
+        SetWindowPos(g_hTreeView, NULL, 310, 65,
+            rc.right - 330, rc.bottom - statusHeight - 75, SWP_NOZORDER);
         break;
     }
 
@@ -480,8 +479,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     RegisterClassA(&wc);
 
     HWND hwnd = CreateWindowA("WarehouseGoodClass",
-        "✅ ПАТТЕРН COMPOSITE - Система управления складом",
-        WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 950, 500,
+        "ПАТТЕРН COMPOSITE - Система управления складом",
+        WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
+        1000, 580,
         NULL, NULL, hInstance, NULL);
 
     if (!hwnd) return 0;
