@@ -52,16 +52,6 @@
 4. **ReputationHandler** — проверяет репутацию с фракцией
 5. **RewardHandler** — выдаёт награду при успешном прохождении всех проверок
 
-Цепочка строится динамически:
-
-```python
-# Построение цепочки для квеста
-level_check = LevelHandler(5)
-item_check = ItemHandler("Меч героя")
-quest_check = PreviousQuestHandler(["quest_farmer", "quest_forester"])
-rep_check = ReputationHandler(50)
-reward_check = RewardHandler()
-
 # Соединение в цепочку
 level_check.set_next(item_check).set_next(quest_check).set_next(rep_check).set_next(reward_check)
 
