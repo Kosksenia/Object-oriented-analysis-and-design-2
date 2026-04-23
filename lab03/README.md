@@ -52,7 +52,7 @@
 4. **ReputationHandler** — проверяет репутацию с фракцией
 5. **RewardHandler** — выдаёт награду при успешном прохождении всех проверок
 
-# Соединение в цепочку
+Соединение в цепочку:
 level_check.set_next(item_check).set_next(quest_check).set_next(rep_check).set_next(reward_check)
 
 ### Игровой мир
