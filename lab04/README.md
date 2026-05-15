@@ -57,7 +57,7 @@
 
 Ниже представлена диаграмма классов, демонстрирующая структуру паттерна.
 
-![Диаграмма классов](https://github.com/Kosksenia/Object-oriented-analysis-and-design-2/blob/437f90cdc323002bad55b114414e3562c5c44a4d/lab04/%D0%BF%D0%BE%D0%BA%D0%B5%D0%BC%D0%BE%D0%BD.drawio%20(1).png)
+![Диаграмма классов](https://github.com/Kosksenia/Object-oriented-analysis-and-design-2/blob/7fec89e6579265b75615968642e5768ebfacf41a/lab04/%D0%BF%D0%BE%D0%BA%D0%B5%D0%BC%D0%BE%D0%BD.drawio%20(2).png)
 ### Ключевые особенности реализации
 
 #### Поимка покемонов
